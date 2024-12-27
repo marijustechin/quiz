@@ -1,29 +1,27 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
+import { IQuestion } from "../types/interfaces";
 
 const API_BASE_URL = "https://quizapi.io/api/v1";
 const API_KEY = process.env.API_KEY;
 
-const config: AxiosRequestConfig = {
-  headers: {
-    "X-Api-Key": API_KEY,
-  },
-  data: {
-    category: "",
-    difficulty: "",
-  },
-};
-
+/**
+ *
+ * @param category stringas
+ * @param difficulty stringas
+ * @returns objektu masyvas
+ */
 export const apiGetQuestions = async (category: string, difficulty: string) => {
-  config.data = { ...config.data, category: category, difficulty: difficulty };
-
   try {
-    const res: AxiosResponse = await axios.get(
+    const res: AxiosResponse = await axios.get<IQuestion[]>(
       `${API_BASE_URL}/questions`,
-      config
+      {
+        params: {
+          apiKey: API_KEY,
+          category: category,
+          difficulty: difficulty,
+        },
+      }
     );
-
-    console.log(res.data);
-
     return res.data;
   } catch (e) {
     return { error: e };
@@ -36,10 +34,11 @@ export const apiGetQuestions = async (category: string, difficulty: string) => {
  */
 export const apiGetCategories = async () => {
   try {
-    const res: AxiosResponse = await axios.get(
-      `${API_BASE_URL}/categories`,
-      config
-    );
+    const res: AxiosResponse = await axios.get(`${API_BASE_URL}/categories`, {
+      params: {
+        apiKey: API_KEY,
+      },
+    });
     return res.data;
   } catch (e) {
     return { error: e };
