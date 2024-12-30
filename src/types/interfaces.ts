@@ -35,3 +35,11 @@ export interface IQuestion {
   category: string;
   difficulty: string;
 }
+
+export interface IHistory {
+  category: string;
+  date: string;
+  score: string;
+  difficulty: string;
+  result: string;
+}

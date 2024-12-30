@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ICategory, IFormInputs, IQuestion } from "../types/interfaces";
 import { apiGetCategories, apiGetQuestions } from "../api/quiz";
 import { useEffect, useState } from "react";
+import { QuizHistory } from "./QuizHistory";
 
 interface StartFormProps {
   onStart: (data: IQuestion[]) => void;
@@ -86,11 +87,13 @@ export const StartForm = ({ onStart = () => {} }: StartFormProps) => {
           )}
           <button
             type="submit"
-            className="bg-lightBlue text-white text-2xl w-[70%] p-3 rounded-xl"
+            className="bg-lightBlue text-white text-2xl w-[70%] p-3 rounded-xl hover:bg-darkBlue"
           >
             Start quiz
           </button>
         </form>
+
+        <QuizHistory />
       </section>
     </>
   );

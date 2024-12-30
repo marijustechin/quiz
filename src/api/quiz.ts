@@ -44,3 +44,16 @@ export const apiGetCategories = async () => {
     return { error: e };
   }
 };
+
+/**
+ *
+ * @returns objektu masyvas is failo
+ */
+export const apiGetQuizHistory = async () => {
+  try {
+    const res: AxiosResponse = await axios.get("./data/history.json");
+    return res.data;
+  } catch (e) {
+    return { error: e };
+  }
+};
