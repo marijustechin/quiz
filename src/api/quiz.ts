@@ -19,6 +19,7 @@ export const apiGetQuestions = async (category: string, difficulty: string) => {
           apiKey: API_KEY,
           category: category,
           difficulty: difficulty,
+          limit: 5,
         },
       }
     );

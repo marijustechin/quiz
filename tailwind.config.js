@@ -8,6 +8,7 @@ export default {
       ligthGreen: "#94D7A2",
       lightPink: "#F8BCBC",
       lightViolet: "#D6DBF5",
+      rose600: "#e11d48",
       white: "#F5F7FB",
     },
     extend: {
