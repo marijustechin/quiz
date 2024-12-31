@@ -42,4 +42,5 @@ export interface IHistory {
   score: string;
   difficulty: string;
   result: string;
+  time: string;
 }

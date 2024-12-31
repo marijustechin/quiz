@@ -39,10 +39,8 @@ export const StartForm = ({ onStart = () => {} }: StartFormProps) => {
 
   return (
     <>
-      <h1 className="text-center text-4xl text-darkBlue font-bold my-8">
-        My very own Quiz App!
-      </h1>
-      <p className="text-center text-darkBlue text-2xl p-5">
+      <h1 className="heading-h1">My very own Quiz App!</h1>
+      <p className="description">
         Here comes the result of my attempt to write write a fully functioning
         quiz app
       </p>

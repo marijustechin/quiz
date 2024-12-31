@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { IQuestion } from '../types/interfaces';
-import { SingleQuestion } from './SingleQuestion';
-import { Timer } from './Timer';
-import { formatDate } from '../helpers/FormatDate';
-import { formatSeconds } from '../helpers/FormatSeconds';
+import { useState } from "react";
+import { IQuestion } from "../types/interfaces";
+import { SingleQuestion } from "./SingleQuestion";
+import { Timer } from "./Timer";
+import { formatDate } from "../helpers/FormatDate";
+import { formatSeconds } from "../helpers/FormatSeconds";
+import { saveResult } from "../helpers/LocalStorage";
 
 interface ShowQuestionsProps {
   questions: IQuestion[];
@@ -17,7 +18,6 @@ interface IAnswer {
 export const ShowQuestions = ({ questions }: ShowQuestionsProps) => {
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(true);
-  const [showUnanswered, setShowUnanswered] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [reveal, setReveal] = useState(false);
   const [answers, setAnswers] = useState<IAnswer[]>([]);
@@ -31,8 +31,8 @@ export const ShowQuestions = ({ questions }: ShowQuestionsProps) => {
     const difficulty = questions[0].difficulty;
     const result =
       answers.filter((a) => a.correct).length > questions.length / 2
-        ? 'Passed'
-        : 'Failed';
+        ? "Passed"
+        : "Failed";
     const history = {
       category: category,
       date: date,
@@ -41,7 +41,7 @@ export const ShowQuestions = ({ questions }: ShowQuestionsProps) => {
       result: result,
       time: formatSeconds(seconds),
     };
-    console.log('result: ', history);
+    saveResult(history);
   };
 
   const handleCheckAnswers = () => {
@@ -53,9 +53,6 @@ export const ShowQuestions = ({ questions }: ShowQuestionsProps) => {
       setReveal(true);
       setShowResult(true);
       handleSaveResult();
-    } else {
-      // jei ne, rodome raudona pranesima
-      setShowUnanswered(true);
     }
   };
 
@@ -67,7 +64,6 @@ export const ShowQuestions = ({ questions }: ShowQuestionsProps) => {
       // jei ne, irasom nauja
       setAnswers([...answers, a]);
     }
-    console.log('answer: ', a);
   };
 
   return (
@@ -75,34 +71,52 @@ export const ShowQuestions = ({ questions }: ShowQuestionsProps) => {
       <div>
         <Timer seconds={seconds} isActive={isActive} setSeconds={setSeconds} />
       </div>
-      {showUnanswered && questions.length !== answers.length && (
-        <p>Please answer ALL questions</p>
-      )}
+
       {questions.map((question) => (
         <div className="border-b border-b-lightViolet py-2" key={question.id}>
           <SingleQuestion
             q={question}
             reveal={reveal}
-            showUnanswered={showUnanswered}
             onSelect={(a) => onSelect(a)}
           />
         </div>
       ))}
       {showResult ? (
-        <div>
-          <p>
-            Result:{' '}
-            {`${answers.filter((a) => a.correct).length}/${questions.length}`}
+        <div className="flex gap-3 items-center justify-center">
+          <p className="font-semibold text-2xl">
+            You scored{" "}
+            {`${answers.filter((a) => a.correct).length}/${questions.length}`}{" "}
+            correct answers
           </p>
+          <button
+            onClick={() => window.location.reload()}
+            type="button"
+            className="bg-lightBlue text-white text-2xl p-3 rounded-xl my-5 mx-auto hover:bg-darkBlue"
+          >
+            Play again
+          </button>
         </div>
       ) : (
-        <button
-          onClick={handleCheckAnswers}
-          type="button"
-          className="bg-lightBlue text-white text-2xl p-3 rounded-xl my-5 mx-auto hover:bg-darkBlue"
-        >
-          Check answers
-        </button>
+        <div className="flex flex-col items-center justify-center mt-3">
+          {questions.length !== answers.length && (
+            <p className="py-1 px-2 bg-ligthGreen font-semibold rounded-lg">
+              To check the answers you need to answer ALL questions
+            </p>
+          )}
+
+          <button
+            disabled={questions.length !== answers.length}
+            onClick={handleCheckAnswers}
+            type="button"
+            className={`${
+              questions.length !== answers.length
+                ? "bg-lightBlue/50"
+                : "hover:bg-darkBlue bg-lightBlue"
+            }  btn-generic`}
+          >
+            Check answers
+          </button>
+        </div>
       )}
     </section>
   );
